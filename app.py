@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for, session  # Import necessary Flask modules
 import psycopg2  # Import PostgreSQL adapter
 from bs4 import BeautifulSoup  # Import BeautifulSoup for web scraping
@@ -13,11 +14,7 @@ app = Flask(__name__)
 
 def connect_db():
     conn = psycopg2.connect(
-        dbname="dhp2024",
-        user="postgres",
-        password="1805",
-        host="localhost",
-        port="5432"
+        dbname="environ ['postgres://news_wrap_user:UpwrbQ88lxx4Rk81DA7VbVQ3bCbyWITF@dpg-cnm808021fec7395ojr0-a5432/news_wrap']
     )
     return conn
 
