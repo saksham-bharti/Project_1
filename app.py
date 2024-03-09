@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 def connect_db():
     conn = psycopg2.connect(
-        dbname="environ ['postgres://news_wrap_user:UpwrbQ88lxx4Rk81DA7VbVQ3bCbyWITF@dpg-cnm808021fec7395ojr0-a5432/news_wrap']
+        dbname=os.environ ['postgres://news_wrap_user:UpwrbQ88lxx4Rk81DA7VbVQ3bCbyWITF@dpg-cnm808021fec7395ojr0-a5432/news_wrap'],
     )
     return conn
 
