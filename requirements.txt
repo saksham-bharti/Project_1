@@ -1,0 +1,10 @@
+Flask
+psycopg2
+beautifulsoup4 
+requests
+nltk
+textblob
+authlib
+Flask-SQLAlchemy 
+Flask-WTF
+newspaper3k
