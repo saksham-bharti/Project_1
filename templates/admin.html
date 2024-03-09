@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 5rem;
+            background-image: url('/static/index4.png');
+            background-repeat: no-repeat;  
+            background-size: cover;  
+        }
+        .container {
+            text-align: left;
+            background-color: rgba(0, 0, 0, 0.667);
+            padding: 150px 70px;
+            border-radius: 5px;
+
+        }
+        .logo img {
+      width: 150px;
+      padding: auto;
+        }
+        header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+      padding: 1rem;
+        }
+        .welcome {
+            text-align: center;
+            text-decoration:underline;
+            margin-top: 20px;
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo 2.png') }}" alt="Your website logo">
+        </div>
+    </header>
+    <div class="welcome">
+        Welcome, Admin!
+    </div>
+    <div class="container">
+        <h2>Table</h2>
+        <p>This is where your table content will go.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>output</title>
+  <style>
+    body {
+      text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-image: url('/static/index4.png');
+      background-repeat: no-repeat;  
+      background-size: cover; 
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      color: #fff;
+    }
+    .logo img {
+      width: 150px;
+      padding: 2rem;
+    }
+    .sign-in a {
+      text-decoration: none;
+      color: #fff;
+      padding: 8px 16px;
+      background-color: #f61c1c;
+      border-radius: 4px;
+      margin-right: 100px;
+      transition: background-color 0.3s ease;
+    }
+    .sign-in a:hover {
+      background-color: #dd0a0a;
+    }
+    main {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+    .search-bar {
+      display: flex;
+      padding: 18px 100px;
+      margin-bottom: 2rem;
+      align-items: center;
+      flex: none;
+      font-size: 16px;
+      border-radius: 4px;
+    }
+    input[type="text"] {
+      background-color: rgba(255, 255, 255, 0.7);
+      color: #ffffff;
+      padding:18px 100px;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      flex: 1;
+    }
+    input[type="text"]:focus {
+            outline: none;
+            border-color: #e9f4ff;
+    }
+    .search-bar button {
+      padding: 15px 30px;
+      background-color: #f61c1c;
+      color: white;
+      font-size: 22px;
+      border: 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 5px;
+      font-weight: 400;
+      transition: background-color 0.3s ease;
+    }
+    .search-bar button:hover {
+      background-color: #dd0a0a;
+    }
+    .output-container {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .output-box {
+      margin-bottom: 2rem;
+    }
+    .outcome-boxes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 1rem;
+    }
+    .outcome-box {
+      flex: 1;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+    }
+    footer {
+      background-color: #333;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+    .social-icons a {
+      color: #fff;
+      margin: 0 10px;
+      text-decoration: none;
+      font-size: 24px;
+    }
+    .social-icons a:hover {
+      color: #f61c1c;
+    }
+    .input-field {
+      padding: 18px 100px;
+      border: 2px solid #eddfdf;
+      border-radius: 4px;
+      font-size: 16px;
+      flex: 1;
+    }
+    .btn {
+      padding: 15px 30px;
+      background-color: #f61c1c;
+      color: white;
+      font-size: 22px;
+      border: 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 5px;
+      font-weight: 400;
+    }
+    .form{
+      padding: 1rem;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="{{ url_for('static', filename='logo 2.png') }}" alt="Your website logo">
+    </div>
+    <nav class="sign-in">
+      <a href="/admin">Sign In</a>
+    </nav>
+  </header>
+  <main>
+    <form class="form" method="POST" action="/submit"> 
+      <input type="text" class="input-field" placeholder="Search for another URL" name="name" required>
+      <button type="submit" class="btn">Get Started > </button>
+    </form>
+    <section class="output-container">
+      <div class="output-box">
+        <h2>Headline:</h2>
+        <p>{{heading}}</p>
+        <div class="output-text">{{text}}</div>
+      </div>
+      <div class="outcome-boxes">
+        <div class="outcome-box">
+          <h3>POS Tag Count:</h3>
+          <p>{{postag_count}}</p>
+        </div>
+        <div class="outcome-box">
+          <h3>Total Number of Words:</h3>
+          <p>{{word_count}}</p>
+        </div>
+        <div class="outcome-box">
+          <h3>Total Number of Sentences:</h3>
+          <p>{{sentense_count}}</p>
+        </div>
+        <div class="outcome-box">
+          <h3>POS Tag:</h3>
+          <p>{{dict_upos}}</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="social-icons">
+      <a href="#" class="fab fa-linkedin"></a>
+      <a href="#" class="fab fa-facebook"></a>
+      <a href="#" class="fab fa-instagram"></a>
+    </div>
+  </footer>
+</body>
+</html>

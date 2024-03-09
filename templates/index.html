@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Started</title>
+  <style>
+    body {
+      text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background-image: url('/static/index4.png');
+      background-repeat: no-repeat;  
+      background-size: cover;  
+      text-align: center;      
+   }
+  
+
+    .container {
+      display: flex;
+      align-items: center;
+      max-width: 42em;
+    }
+
+    .input-field {
+      padding: 18px 100px;
+      border: 2px solid #eddfdf;
+      border-radius: 4px;
+      font-size: 16px;
+      flex: 1;
+    }
+    input[type="text"] {
+            background-color: transparent;
+            color: #ffffff;
+            font-size: 16px;
+            border-bottom: 2px solid #ccc;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #e9f4ff;
+        }
+    .btn {
+      padding: 15px 30px;
+      background-color: #f61c1c;
+      color: white;
+      font-size: 22px;
+      border: 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 5px;
+      font-weight: 400;
+    }
+
+    .sign-in {
+      position: absolute;
+      top: 70px;
+      right: 100px;
+      padding: 8px 16px;
+      background-color: #f61c1c;
+      color: white;
+      border: 1px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .cover-heading {
+      font-weight: 700;
+      letter-spacing: .1rem;
+      margin-bottom: 1rem;
+      font-size: xx-large;
+      color:white;
+      font-size: 3.75rem;
+    }
+    .lead {
+      font-size: 1.25rem;
+      font-weight: 300;
+      color: #fffdfd;
+
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+      color: #fff;
+      align-items: center;
+    }
+    .logo img {
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      width: 150px;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="{{ url_for('static', filename='logo 2.png') }}" alt="Your website logo">
+    </div>
+    <nav class="sign-in">
+    <a href= "/admin" style="color: white; text-decoration: none;">Sign In</a>
+    </nav>
+</header>
+  <div class="container">
+    <main class="px-3">
+      <h1 class="cover-heading">Get Text of any News, any time</h1>
+      <p class="lead">We provide you free service to serve text information of any news just with it's URL</p>
+      <p class="lead"></p>
+      <form method="POST" action="/submit"> 
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+      <input type="text" class="input-field" placeholder="Enter Your URL" name="name" required>
+      <button type="submit" class="btn">Get Started > </button>
+    </form>
+  </main>
+  </div>
+</body>
+</html>
