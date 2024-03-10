@@ -196,7 +196,9 @@ def github_authorize():
         else:
             return render_template("admin.html")  
     except:
-        return render_template("index.html") 
+        cur.execute('select * from news_wrap')  
+        data = cur.fetchall()
+        return render_template("admin.html",data=data) 
 
 # Logout route for GitHub
 @app.route('/logout/github')
