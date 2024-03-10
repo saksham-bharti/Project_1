@@ -180,21 +180,19 @@ def github_authorize():
     # It take connection 
     conn = connect_db()  
     cur = conn.cursor()  
-    
-    try:
-        github = OAuth.create_client('github')  # Create a GitHub OAuth client
-        token = github.authorize_access_token()  # Get the access token from the authorization response
-        session['github_token'] = token  # Store the access token in the session
-        resp = github.get('user').json()  # Get the user's information from GitHub
-        print(f"\n{resp}\n")
-        logged_in_username = resp.get('login')  # Get the username from the user's information
-        if logged_in_username in github_admin_usernames:  # Check if the username is in the list of admin usernames
-            cur.execute('select * from news_wrap')  
-            data = cur.fetchall()  # Fetch all rows from the 'news' table
+    github = OAuth.create_client('github')  # Create a GitHub OAuth client
+    token = github.authorize_access_token()  # Get the access token from the authorization response
+    session['github_token'] = token  # Store the access token in the session
+    resp = github.get('user').json()  # Get the user's information from GitHub
+    print(f"\n{resp}\n")
+    logged_in_username = resp.get('login')  # Get the username from the user's information
+    if logged_in_username in github_admin_usernames:  # Check if the username is in the list of admin usernames
+        cur.execute('select * from news_wrap')  
+        data = cur.fetchall()  # Fetch all rows from the 'news' table
             # conn.close()  
-            return redirect('/admin/welcome')
-        else:
-            return 'Error'  
+        return redirect('/admin/welcome')
+    else:
+        return 'Error'  
         # cur.execute('select * from news_wrap')  
         # data = cur.fetchall()
 
