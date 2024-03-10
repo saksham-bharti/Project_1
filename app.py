@@ -194,7 +194,7 @@ def github_authorize():
             # conn.close()  
             return redirect('/admin/welcome')
         else:
-            return render_template("index.html")  
+            return 'Error'  
     except:
         # cur.execute('select * from news_wrap')  
         # data = cur.fetchall()
