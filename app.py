@@ -10,21 +10,25 @@ from nltk import pos_tag  # Import part-of-speech tagger from NLTK
 import json  # Import json module for handling JSON data
 from newspaper import Article
 from authlib.integrations.flask_client import OAuth
-#nltk.download('all')
+
+nltk.download('all')
 app = Flask(__name__)
 
 
 def connect_db():
     conn = psycopg2.connect(
-        host='dpg-cnm808021fec7395ojr0-a', database='news_wrap', user='news_wrap_user' , password='UpwrbQ88lxx4Rk81DA7VbVQ3bCbyWITF'
+        host='dpg-cnm808021fec7395ojr0-a', database='news_wrap', user='news_wrap_user', password='UpwrbQ88lxx4Rk81DA7VbVQ3bCbyWITF'
     )
     return conn
-    
+
+
 app.config['SECRET_KEY'] = "THIS SHOULD BE SECRET"
 app.config['GITHUB_CLIENT_ID'] = "3b63478995dd60c2e980"
 app.config['GITHUB_CLIENT_SECRET'] = "a83a89bd91a99b5f72fcb7af6d169eb308f877c0"
-github_admin_usernames=['saksham-bharti']
-github = OAuth.register(
+github_admin_usernames = ['saksham-bharti']
+oauth = OAuth(app)
+
+github = oauth.register(
     name='github',
     client_id=app.config["GITHUB_CLIENT_ID"],
     client_secret=app.config["GITHUB_CLIENT_SECRET"],
@@ -36,7 +40,8 @@ github = OAuth.register(
     client_kwargs={'scope': 'user:email'},
 )
 
-    # Function to clean text from a given URL
+
+# Function to clean text from a given URL
 def cleaned_text(url):
     response = requests.get(url)  # Send HTTP GET request to the provided URL
     if response.status_code == 200:  # If the request is successful
@@ -45,7 +50,7 @@ def cleaned_text(url):
         article = Article(url)
         article.download()
         article.parse()
-        content= article.text
+        content = article.text
         return headline, content
     else:  # If the request fails
         print("Failed to retrieve the webpage. Status code:", response.status_code)
@@ -54,6 +59,7 @@ def cleaned_text(url):
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -88,14 +94,13 @@ def submit():
         words_count = words(text)
         pos_tag_count = sum(dict_upos.values())
 
-            # Store summary data in a dictionary
+        # Store summary data in a dictionary
         summary = {'words_count': words_count, 'sentences_count': sent_count, 'POS_tag_count': sum(dict_upos.values())}
 
-            # Connect to the database
+        # Connect to the database
         conn = connect_db()
         cur = conn.cursor()
 
-            
         def create_table(conn):
             cur = conn.cursor()
             cur.execute("""
@@ -114,21 +119,21 @@ def submit():
         conn = connect_db()
         create_table(conn)
         cur = conn.cursor()
-            
-            # Insert data into the database
+
+        # Insert data into the database
         cur.execute("""
             INSERT INTO news_wrap (url, text, word_count, sentence_count, postag_count)
             VALUES (%s, %s, %s, %s, %s)
-            """, (url, text, words_count, sent_count, pos_tag_count))
+        """, (url, text, words_count, sent_count, pos_tag_count))
 
         conn.commit()  # Commit changes
         cur.close()
         conn.close()  # Close database connection
 
-            # Render the content.html template with the extracted data
+        # Render the content.html template with the extracted data
         return render_template('output_text.html', heading=heading, text=text,
-                            word_count=words_count, sentense_count=sent_count, dict_upos=dict_upos,
-                            postag_count=pos_tag_count)
+                               word_count=words_count, sentense_count=sent_count, dict_upos=dict_upos,
+                               postag_count=pos_tag_count)
     except:
         # If it's not a URL, handle the error
         error_message = "Invalid input. Please enter a valid URL."
