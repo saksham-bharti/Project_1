@@ -9,3 +9,4 @@ Flask-SQLAlchemy  # Optional, for database interaction (consider using)
 Flask-WTF
 newspaper3k
 google-auth-oauthlib
+Flask-Dance
