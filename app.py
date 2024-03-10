@@ -1,22 +1,3 @@
-import os
-from flask import Flask, render_template, request, redirect, url_for, session  # Import necessary Flask modules
-import psycopg2  # Import PostgreSQL adapter
-from bs4 import BeautifulSoup  # Import BeautifulSoup for web scraping
-import requests  # Import requests library for HTTP requests
-import re  # Import re for regular expressions
-import nltk  # Import nltk for natural language processing
-from nltk.tokenize import word_tokenize, sent_tokenize  # Import tokenizers from NLTK
-from nltk import pos_tag  # Import part-of-speech tagger from NLTK
-import json  # Import json module for handling JSON data
-from newspaper import Article
-
-app = Flask(__name__)
-
-def connect_db():
-    conn = psycopg2.connect(
-        dbname=os.environ ['postgres://news_wrap_user:UpwrbQ88lxx4Rk81DA7VbVQ3bCbyWITF@dpg-cnm808021fec7395ojr0-a5432/news_wrap'],
-    )
-    return conn
 
 # Function to clean text from a given URL
 def cleaned_text(url):
@@ -134,7 +115,7 @@ def login():
     user = cur.fetchone()
 
     if user:
-        return redirect('/admin')
+        return redirect('/admin/welcome')
     else:
         return "Invalid email or password"
         
