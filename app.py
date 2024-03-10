@@ -9,7 +9,6 @@ from nltk.tokenize import word_tokenize, sent_tokenize  # Import tokenizers from
 from nltk import pos_tag  # Import part-of-speech tagger from NLTK
 import json  # Import json module for handling JSON data
 from newspaper import Article
-from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 
@@ -131,20 +130,14 @@ def login():
     conn = connect_db()
     cur = conn.cursor()
 
-    
-    try:
-        cur.execute("SELECT * FROM admin WHERE LOWER(email) = %s", (email.lower(),))
-        user = cur.fetchone()
+    cur.execute("SELECT * FROM admin WHERE email=%s AND password=%s", (email.lower(), password))
+    user = cur.fetchone()
 
-        if user and check_password_hash(user['password_hash'], password):
-            return redirect('/admin')
-        else:
-            return "Invalid email or password"
-    except Exception as e:
-        return f"An error occurred: {str(e)}"
-    finally:
-        cur.close()
-        conn.close()
+    if user:
+        return redirect('/admin')
+    else:
+        return "Invalid email or password"
+        
 @app.route('/admin/welcome')  # Route for admin welcome page
 def admin_welcome():
     return render_template('admin.html')  # 
