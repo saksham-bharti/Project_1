@@ -70,6 +70,26 @@
         align-items: center;
         color: #fff;
             }
+            .github-login {
+            width: calc(100% - 22px);
+            display: inline-block;
+            padding: 15px 0px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .github-login:hover {
+            background-color: #555;
+        }
+        .github-login i {
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -89,10 +109,10 @@
                 <input type="password" id="password" name="password" placeholder="Password" required><br>
                 <input type="submit" value="Login">
             </form>
-             <a href="{{ url_for('github_login') }}">
+            <a href="{{ url_for('github_login') }}" class="github-login">
                 <i class="fab fa-github"></i>
                 <span>Login with GitHub</span>
-             </a>
+            </a>
         </main>
     </div>
 </body>
