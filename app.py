@@ -56,9 +56,17 @@ def cleaned_text(url):
         print("Failed to retrieve the webpage. Status code:", response.status_code)
 
 
+
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if request.headers.get('User-Agent') == 'Go-http-client/2.0':
+        # Handle HTTP client request
+        return 'HTTP Client request'
+    else:
+        # Handle web browser request
+        return render_template('index.html')
+
 
 
 @app.route('/submit', methods=['POST'])
