@@ -126,7 +126,7 @@ def submit():
         conn.close()  # Close database connection
 
             # Render the content.html template with the extracted data
-         return render_template('output_text.html', heading=heading, text=text,
+        return render_template('output_text.html', heading=heading, text=text,
                             word_count=words_count, sentense_count=sent_count, dict_upos=dict_upos,
                             postag_count=pos_tag_count)
     except:
