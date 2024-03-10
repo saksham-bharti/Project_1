@@ -22,11 +22,11 @@ def connect_db():
     return conn
 
 
+oauth = OAuth(app)
 app.config['SECRET_KEY'] = "THIS SHOULD BE SECRET"
 app.config['GITHUB_CLIENT_ID'] = "3b63478995dd60c2e980"
 app.config['GITHUB_CLIENT_SECRET'] = "a83a89bd91a99b5f72fcb7af6d169eb308f877c0"
 github_admin_usernames = ['saksham-bharti']
-oauth = OAuth(app)
 
 github = oauth.register(
     name='github',
