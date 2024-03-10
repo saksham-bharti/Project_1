@@ -10,7 +10,7 @@ from nltk import pos_tag  # Import part-of-speech tagger from NLTK
 import json  # Import json module for handling JSON data
 from newspaper import Article
 from flask_dance.contrib.github import make_github_blueprint, github
-nltk.download('all')
+#nltk.download('all')
 app = Flask(__name__)
 
 def connect_db():
