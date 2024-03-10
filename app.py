@@ -189,9 +189,9 @@ def github_authorize():
         print(f"\n{resp}\n")
         logged_in_username = resp.get('login')  # Get the username from the user's information
         if logged_in_username in github_admin_usernames:  # Check if the username is in the list of admin usernames
-            cur.execute('select * from news_wrap')  
-            data = cur.fetchall()  # Fetch all rows from the 'news' table
-            conn.close()  
+            # cur.execute('select * from news_wrap')  
+            # data = cur.fetchall()  # Fetch all rows from the 'news' table
+            # conn.close()  
             return render_template("admin.html")
         else:
             return render_template("admin.html")  
