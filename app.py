@@ -11,7 +11,7 @@ import json  # Import json module for handling JSON data
 from newspaper import Article
 from authlib.integrations.flask_client import OAuth
 
-nltk.download('all')
+#nltk.download('all')
 app = Flask(__name__)
 
 
