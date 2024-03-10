@@ -195,10 +195,8 @@ def github_authorize():
             return redirect('/admin/welcome')
         else:
             return 'Error'  
-    except:
         # cur.execute('select * from news_wrap')  
         # data = cur.fetchall()
-        return render_template("index.html") 
 
 # Logout route for GitHub
 @app.route('/logout/github')
