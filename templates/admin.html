@@ -9,16 +9,21 @@
             font-family: Arial, sans-serif;
             color: #fff;
             margin: 0;
-            padding: 5rem;
+            padding: 1rem;
             background-image: url('/static/index4.png');
             background-repeat: no-repeat;  
-            background-size: cover;  
+            background-size: cover; 
+            box-sizing: border-box; 
         }
         .container {
             text-align: left;
             background-color: rgba(0, 0, 0, 0.667);
-            padding: 150px 70px;
+            padding: 20px;
             border-radius: 5px;
+            box-sizing: border-box; 
+            overflow-y: auto;
+            max-width: 1200px; /* Set maximum width */
+            margin: 0 auto;
 
         }
         .logo img {
@@ -40,6 +45,48 @@
             margin-bottom: 10px;
             color: #ffffff;
         }
+        .logout-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .logout-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ecf0f1;
+        }
+        
     </style>
 </head>
 <body>
@@ -47,13 +94,41 @@
         <div class="logo">
             <img src="{{ url_for('static', filename='logo 2.png') }}" alt="Your website logo">
         </div>
+        <div>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
     </header>
     <div class="welcome">
         Welcome, Admin!
     </div>
     <div class="container">
-        <h2>Table</h2>
-        <p>This is where your table content will go.</p>
+        <main>
+            {% if data %}
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>URL</th>
+                        <th>Title</th>
+                        <th>Number of Sentences</th>
+                        <th>Number of Words</th>
+                        <th>POS Counts</th>
+                    </tr>
+                    {% for analysis in data %}
+                        <tr>
+                            <td>{{ analysis[0] }}</td>
+                            <td>{{ analysis[1] }}</td>
+                            <td>{{ analysis[2] }}</td>
+                            <td>{{ analysis[4] }}</td>
+                            <td>{{ analysis[5] }}</td>
+                            <td>{{ analysis[6] }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>No past analyses available.</p>
+            {% endif %}
+        </main>
+    
     </div>
 </body>
 </html>
