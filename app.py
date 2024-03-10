@@ -192,7 +192,7 @@ def github_authorize():
             cur.execute('select * from news_wrap')  
             data = cur.fetchall()  # Fetch all rows from the 'news' table
             # conn.close()  
-            return render_template("admin.html",data=data)
+            return redirect('/admin/welcome')
         else:
             return render_template("index.html")  
     except:
@@ -205,7 +205,7 @@ def github_authorize():
 def github_logout():
     '''Route for logging out from GitHub OAuth'''
     session.pop('github_token', None)  # Remove the access token from the session
-    return redirect(url_for('submit'))
+    return redirect(url_for('index.html'))
 
     if __name__ == '__main__':
         app.run(debug=True)
