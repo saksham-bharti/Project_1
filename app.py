@@ -194,7 +194,7 @@ def github_authorize():
             conn.close()  
             return render_template("admin.html")
         else:
-            return render_template("index.html")  
+            return render_template("admin.html")  
     except:
         return render_template("index.html") 
 
