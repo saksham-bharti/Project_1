@@ -9,7 +9,7 @@ from nltk.tokenize import word_tokenize, sent_tokenize  # Import tokenizers from
 from nltk import pos_tag  # Import part-of-speech tagger from NLTK
 import json  # Import json module for handling JSON data
 from newspaper import Article
-from authlib.integrations.flask_client import OAuth
+from flask_dance.contrib.github import make_github_blueprint, github
 nltk.download('all')
 app = Flask(__name__)
 
@@ -23,17 +23,12 @@ app.config['SECRET_KEY'] = "THIS SHOULD BE SECRET"
 app.config['GITHUB_CLIENT_ID'] = "3b63478995dd60c2e980"
 app.config['GITHUB_CLIENT_SECRET'] = "a83a89bd91a99b5f72fcb7af6d169eb308f877c0"
 github_admin_usernames=['saksham-bharti']
-github = OAuth.register(
-    name='github',
+github_blueprint = make_github_blueprint(
     client_id=app.config["GITHUB_CLIENT_ID"],
     client_secret=app.config["GITHUB_CLIENT_SECRET"],
-    access_token_url='https://github.com/login/oauth/access_token',
-    access_token_params=None,
-    authorize_url='https://github.com/login/oauth/authorize',
-    authorize_params=None,
-    api_base_url='https://api.github.com/',
-    client_kwargs={'scope': 'user:email'},
 )
+
+app.register_blueprint(github_blueprint, url_prefix="/login")
 
 # Function to clean text from a given URL
 def cleaned_text(url):
@@ -155,40 +150,10 @@ def login():
 def admin_welcome():
     return render_template('admin.html')  #
 
-
 @app.route('/login/github')
 def github_login():
     '''Route for initiating GitHub OAuth login'''
-    github = oauth.create_client('github')  # Create a GitHub OAuth client
-    redirect_uri = url_for('github_authorize', _external=True)  # It Generate the redirect URI for authorization
-    return github.authorize_redirect(redirect_uri)  # Redirect the user to GitHub for authorization
-
-
-# Github authorize route
-@app.route('/login/github/authorize')
-def github_authorize():
-    '''Route for handling GitHub OAuth authorization'''
-    # main function for github that check if the user is admin the it redirect to history page 
-    # It take connection 
-    conn = connect_db()  
-    cur = conn.cursor()  
-    
-    try:
-        github = oauth.create_client('github')  # Create a GitHub OAuth client
-        token = github.authorize_access_token()  # Get the access token from the authorization response
-        session['github_token'] = token  # Store the access token in the session
-        resp = github.get('user').json()  # Get the user's information from GitHub
-        # print(f"\n{resp}\n")
-        logged_in_username = resp.get('login')  # Get the username from the user's information
-        if logged_in_username in github_admin_usernames:  # Check if the username is in the list of admin usernames
-            cur.execute('select * from news_wrap')  
-            data = cur.fetchall()  # Fetch all rows from the 'news' table
-            conn.close()  
-            return render_template("admin.html")
-        else:
-            return render_template("index.html")  
-    except:
-        return render_template("index.html") 
+    return redirect(url_for("github.login"))
 
 # Logout route for GitHub
 @app.route('/logout/github')
@@ -196,6 +161,5 @@ def github_logout():
     '''Route for logging out from GitHub OAuth'''
     session.pop('github_token', None)  # Remove the access token from the session
     return redirect(url_for('submit'))
-
 if __name__ == '__main__':
         app.run(debug=True)
