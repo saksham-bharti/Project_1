@@ -186,18 +186,18 @@ def github_authorize():
             cur.execute('select * from news_wrap')  
             data = cur.fetchall()  # Fetch all rows from the 'news' table
             conn.close()  
-            return render_template("", lst=data)
+            return render_template("admin.html")
         else:
-            return render_template("News.html", dictmain={})  
+            return render_template("index.html")  
     except:
-        return render_template("News.html", dictmain={}) 
+        return render_template("index.html") 
 
 # Logout route for GitHub
 @app.route('/logout/github')
 def github_logout():
     '''Route for logging out from GitHub OAuth'''
     session.pop('github_token', None)  # Remove the access token from the session
-    return redirect(url_for('portal'))
+    return redirect(url_for('submit'))
 
     if __name__ == '__main__':
         app.run(debug=True)
