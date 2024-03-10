@@ -11,22 +11,20 @@ import json  # Import json module for handling JSON data
 from newspaper import Article
 from authlib.integrations.flask_client import OAuth
 
-#nltk.download('all')
+nltk.download('all')
 app = Flask(__name__)
-
 
 def connect_db():
     conn = psycopg2.connect(
         host='dpg-cnm808021fec7395ojr0-a', database='news_wrap', user='news_wrap_user', password='UpwrbQ88lxx4Rk81DA7VbVQ3bCbyWITF'
     )
     return conn
-
-
 oauth = OAuth(app)
+
+# github
 app.config['SECRET_KEY'] = "THIS SHOULD BE SECRET"
-app.config['GITHUB_CLIENT_ID'] = "3b63478995dd60c2e980"
-app.config['GITHUB_CLIENT_SECRET'] = "a83a89bd91a99b5f72fcb7af6d169eb308f877c0"
-github_admin_usernames = ['saksham-bharti']
+app.config['GITHUB_CLIENT_ID'] = "3caee7f123efc248d725"
+app.config['GITHUB_CLIENT_SECRET'] = "cd017e28edefc4c26779425eb95551e5972a1caa"
 
 github = oauth.register(
     name='github',
@@ -39,6 +37,10 @@ github = oauth.register(
     api_base_url='https://api.github.com/',
     client_kwargs={'scope': 'user:email'},
 )
+
+# GitHub admin usernames for verification
+github_admin_usernames = ["saksham-bharti","atmabodha"]
+
 
 
 # Function to clean text from a given URL
@@ -56,8 +58,6 @@ def cleaned_text(url):
         print("Failed to retrieve the webpage. Status code:", response.status_code)
 
 
-
-
 @app.route('/')
 def index():
     if request.headers.get('User-Agent') == 'Go-http-client/2.0':
@@ -66,7 +66,6 @@ def index():
     else:
         # Handle web browser request
         return render_template('index.html')
-
 
 
 @app.route('/submit', methods=['POST'])
@@ -164,52 +163,66 @@ def login():
     user = cur.fetchone()
 
     if user:
-        return redirect('/admin/welcome')
+        cur.execute('select * from news_wrap')  
+        data = cur.fetchall()  # Fetch all rows from the 'news' table
+        conn.close()  
+        return render_template('admin.html', data=data) 
+    
     else:
         return "Invalid email or password"
+    
+# Logout route
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return render_template('index.html')
+
             
 @app.route('/admin/welcome')  # Route for admin welcome page
 def admin_welcome():
     return render_template('admin.html')  # 
 
+conn = connect_db()  
+cur = conn.cursor()  
+
 @app.route('/login/github')
 def github_login():
-    '''Route for initiating GitHub OAuth login'''
-    github = oauth.create_client('github')  # Create a GitHub OAuth client
-    redirect_uri = url_for('github_authorize', _external=True)  # It Generate the redirect URI for authorization
-    return github.authorize_redirect(redirect_uri)  # Redirect the user to GitHub for authorization
-
+    github = oauth.create_client('github')
+    redirect_uri = url_for('github_authorize', _external=True)
+    return github.authorize_redirect(redirect_uri)
 
 # Github authorize route
 @app.route('/login/github/authorize')
 def github_authorize():
-    '''Route for handling GitHub OAuth authorization'''
-    # main function for github that check if the user is admin the it redirect to history page 
-    # It take connection 
-    conn = connect_db()  
-    cur = conn.cursor()  
-    github = OAuth.create_client('github')  # Create a GitHub OAuth client
-    token = github.authorize_access_token()  # Get the access token from the authorization response
-    session['github_token'] = token  # Store the access token in the session
-    resp = github.get('user').json()  # Get the user's information from GitHub
-    print(f"\n{resp}\n")
-    logged_in_username = resp.get('login')  # Get the username from the user's information
-    if logged_in_username in github_admin_usernames:  # Check if the username is in the list of admin usernames
-        cur.execute('select * from news_wrap')  
-        data = cur.fetchall()  # Fetch all rows from the 'news' table
-            # conn.close()  
-        return redirect('/admin/welcome')
-    else:
-        return 'Error'  
-        # cur.execute('select * from news_wrap')  
-        # data = cur.fetchall()
+    try:
+        github = oauth.create_client('github')
+        token = github.authorize_access_token()
+        session['github_token'] = token
+        resp = github.get('user').json()
+        print(f"\n{resp}\n")
+        # print(type(repr))
+        # data=get_history_from_database()
+        # return render_template("history.html",data=data)
+        logged_in_username = resp.get('login')
+        if logged_in_username in github_admin_usernames:
+            cur.execute('select * from news_wrap')  
+            data = cur.fetchall()  # Fetch all rows from the 'news' table
+            conn.close()  
+            return render_template("admin.html", data=data)
+        else:
+            return redirect(url_for('index'))
+    except:
+        return redirect(url_for('index'))
 
+    
 # Logout route for GitHub
 @app.route('/logout/github')
 def github_logout():
-    '''Route for logging out from GitHub OAuth'''
-    session.pop('github_token', None)  # Remove the access token from the session
-    return redirect(url_for('index.html'))
+    session.clear()
+    # session.pop('github_token', None)()
+    print("logout")
+    # return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
-    if __name__ == '__main__':
-        app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
