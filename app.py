@@ -104,15 +104,15 @@ def submit():
         def create_table(conn):
             cur = conn.cursor()
             cur.execute("""
-        CREATE TABLE IF NOT EXISTS news_wrap (
-            id SERIAL PRIMARY KEY,
-            url VARCHAR(1000),
-            text TEXT,
-            word_count INTEGER,
-            sentence_count INTEGER,
-            postag_count INTEGER
-        )
-    """)
+            CREATE TABLE IF NOT EXISTS news_wrap(
+                id SERIAL PRIMARY KEY,
+                url VARCHAR(1000),
+                text TEXT,
+                word_count INTEGER,
+                sentence_count INTEGER,
+                postag_count INTEGER
+                )
+            """)
             conn.commit()
             cur.close()
 
@@ -186,7 +186,7 @@ def github_authorize():
         token = github.authorize_access_token()  # Get the access token from the authorization response
         session['github_token'] = token  # Store the access token in the session
         resp = github.get('user').json()  # Get the user's information from GitHub
-        # print(f"\n{resp}\n")
+        print(f"\n{resp}\n")
         logged_in_username = resp.get('login')  # Get the username from the user's information
         if logged_in_username in github_admin_usernames:  # Check if the username is in the list of admin usernames
             cur.execute('select * from news_wrap')  
