@@ -9,9 +9,11 @@ from nltk.tokenize import word_tokenize, sent_tokenize  # Import tokenizers from
 from nltk import pos_tag  # Import part-of-speech tagger from NLTK
 import json  # Import json module for handling JSON data
 from newspaper import Article
-nltk.download('all')
+from authlib.integrations.flask_client import OAuth
+#nltk.download('all')
 app = Flask(__name__)
-https://github.com/saksham-bharti/Project_1/edit/main/app.py
+
+
 def connect_db():
     conn = psycopg2.connect(
         host='dpg-cnm808021fec7395ojr0-a', database='news_wrap', user='news_wrap_user' , password='UpwrbQ88lxx4Rk81DA7VbVQ3bCbyWITF'
