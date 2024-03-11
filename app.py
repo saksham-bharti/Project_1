@@ -22,7 +22,7 @@ def connect_db():
 oauth = OAuth(app)
 
 # github
-app.config['SECRET_KEY'] = "THIS SHOULD BE SECRET"
+app.config['SECRET_KEY'] = "Its the biggers tressure, hide it from others"
 app.config['GITHUB_CLIENT_ID'] = "3caee7f123efc248d725"
 app.config['GITHUB_CLIENT_SECRET'] = "cd017e28edefc4c26779425eb95551e5972a1caa"
 
