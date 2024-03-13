@@ -145,7 +145,6 @@ def submit():
         # If it's not a URL, handle the error
         error_message = "Invalid input. Please enter a valid URL."
         return render_template('index.html', error=error_message)
-        
 
 @app.route('/admin')  # Route for admin login
 def admin():
@@ -223,6 +222,5 @@ def github_logout():
     print("logout")
     # return redirect(url_for('index'))
     return redirect(url_for('index'))
-
 if __name__ == '__main__':
     app.run(debug=True)
