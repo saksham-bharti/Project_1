@@ -1,17 +1,17 @@
-import os
 from flask import Flask, render_template, request, redirect, url_for, session  # Import necessary Flask modules
-import psycopg2  # Import PostgreSQL adapter
-from bs4 import BeautifulSoup  # Import BeautifulSoup for web scraping
+import psycopg2
+from bs4 import BeautifulSoup  
 import requests  # Import requests library for HTTP requests
 import re  # Import re for regular expressions
 import nltk  # Import nltk for natural language processing
 from nltk.tokenize import word_tokenize, sent_tokenize  # Import tokenizers from NLTK
 from nltk import pos_tag  # Import part-of-speech tagger from NLTK
-import json  # Import json module for handling JSON data
 from newspaper import Article
 from authlib.integrations.flask_client import OAuth
 
-#nltk.download('all')
+nltk.download('all')
+
+
 app = Flask(__name__)
 
 def connect_db():
@@ -42,12 +42,11 @@ github = oauth.register(
 github_admin_usernames = ["saksham-bharti","atmabodha"]
 
 
-# Function to clean text from a given URL
 def cleaned_text(url):
-    response = requests.get(url)  # Send HTTP GET request to the provided URL
+    response = requests.get(url)  
     if response.status_code == 200:  # If the request is successful
         soup = BeautifulSoup(response.content, 'html.parser')
-        headline = soup.find('h1').get_text()  # Extracting headline from the title tag
+        headline = soup.find('h1').get_text() 
         article = Article(url)
         article.download()
         article.parse()
@@ -60,10 +59,8 @@ def cleaned_text(url):
 @app.route('/')
 def index():
     if request.headers.get('User-Agent') == 'Go-http-client/2.0':
-        # Handle HTTP client request
         return 'HTTP Client request'
     else:
-        # Handle web browser request
         return render_template('index.html')
 
 
@@ -71,15 +68,10 @@ def index():
 def submit():
     url = request.form['name']  # Get the URL from the submitted form
     try:
-        heading, text = cleaned_text(url)  # Call the function to get cleaned text from the URL
+        heading, text = cleaned_text(url)  
         words_list = word_tokenize(text)
         sent_list = sent_tokenize(text)
-
-        count_stop_words = 0
-        for i in words_list:
-            if i.lower() in nltk.corpus.stopwords.words('english'):
-                count_stop_words += 1
-
+        
         def words(string):
             punc_list = ['.', ',', '!', '?']
             word_lst = word_tokenize(text)
@@ -99,9 +91,6 @@ def submit():
         sent_count = len(sent_list)
         words_count = words(text)
         pos_tag_count = sum(dict_upos.values())
-
-        # Store summary data in a dictionary
-        summary = {'words_count': words_count, 'sentences_count': sent_count, 'POS_tag_count': sum(dict_upos.values())}
 
         # Connect to the database
         conn = connect_db()
@@ -145,15 +134,15 @@ def submit():
         error_message = "Invalid input. Please enter a valid URL."
         return render_template('index.html', error=error_message)
 
-@app.route('/admin')  # Route for admin login
+@app.route('/admin')  
 def admin():
-    return render_template('sign_in.html')  # Render the admin.html template
+    return render_template('sign_in.html') 
 
 
-@app.route('/login', methods=['POST'])  # Route for handling login form submission
+@app.route('/login', methods=['POST']) 
 def login():
-    email = request.form.get('email')  # Get email from the submitted form
-    password = request.form.get('password')  # Get password from the submitted form
+    email = request.form.get('email')  
+    password = request.form.get('password') 
     conn = connect_db()
     cur = conn.cursor()
 
@@ -168,15 +157,14 @@ def login():
     
     else:
         return "Invalid email or password"
-    
-# Logout route
+
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
     return render_template('index.html')
 
             
-@app.route('/admin/welcome')  # Route for admin welcome page
+@app.route('/admin/welcome') 
 def admin_welcome():
     return render_template('admin.html')  # 
 
@@ -189,7 +177,7 @@ def github_login():
     redirect_uri = url_for('github_authorize', _external=True)
     return github.authorize_redirect(redirect_uri)
 
-# Github authorize route
+
 @app.route('/login/github/authorize')
 def github_authorize():
     try:
@@ -198,10 +186,8 @@ def github_authorize():
         session['github_token'] = token
         resp = github.get('user').json()
         print(f"\n{resp}\n")
-        # print(type(repr))
-        # data=get_history_from_database()
-        # return render_template("history.html",data=data)
         logged_in_username = resp.get('login')
+        
         if logged_in_username in github_admin_usernames:
             cur.execute('select * from news_wrap')  
             data = cur.fetchall()  # Fetch all rows from the 'news' table
@@ -217,9 +203,8 @@ def github_authorize():
 @app.route('/logout/github')
 def github_logout():
     session.clear()
-    # session.pop('github_token', None)()
     print("logout")
-    # return redirect(url_for('index'))
+    
     return redirect(url_for('index'))
 if __name__ == '__main__':
     app.run(debug=True)
