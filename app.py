@@ -11,7 +11,7 @@ import json  # Import json module for handling JSON data
 from newspaper import Article
 from authlib.integrations.flask_client import OAuth
 
-nltk.download('all')
+#nltk.download('all')
 app = Flask(__name__)
 
 def connect_db():
@@ -22,7 +22,7 @@ def connect_db():
 oauth = OAuth(app)
 
 # github
-app.config['SECRET_KEY'] = "Its the biggers tressure, hide it from others"
+app.config['SECRET_KEY'] = "THIS SHOULD BE SECRET"
 app.config['GITHUB_CLIENT_ID'] = "3caee7f123efc248d725"
 app.config['GITHUB_CLIENT_SECRET'] = "cd017e28edefc4c26779425eb95551e5972a1caa"
 
